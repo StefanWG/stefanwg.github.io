@@ -91,9 +91,9 @@ function updateTable(silver, gold) {
     }
 
     var goldDiv = document.getElementById('gold');
-    goldDiv.innerHTML = "Gold Medals: " + roundToHundredth(gold*silver).toString();
+    goldDiv.innerHTML = "Gold: " + roundToHundredth(gold*silver).toString();
     var silverDiv = document.getElementById('silver');
-    silverDiv.innerHTML = "Silver Medals: " + roundToHundredth(silver).toString();
+    silverDiv.innerHTML = "Silver: " + roundToHundredth(silver).toString();
 }
 
 var ssMain = 1;
@@ -194,7 +194,7 @@ d3.text("data/countries.csv", function(text) {
             changeCSSStyle(".circle","display", "none");
             img.style.cursor = "pointer";
             circle.classList.toggle("on");
-            changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "white");
+            changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "#f4f4f4");
         });
 
 
