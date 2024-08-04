@@ -22,7 +22,6 @@ const roundToHundredth = (value) => {
 function writeTable(t) {
     var medalsTable = document.getElementById('medals');
     medalsTable.innerHTML = '';
-    var medalsTable = document.getElementById('medals');
     // Add header row
     var header = medalsTable.createTHead();
     var headerRow = header.insertRow(0);
@@ -45,8 +44,10 @@ function writeTable(t) {
     headerCell.textContent = 'Points';
     headerRow.appendChild(headerCell);
 
+
+    var body = medalsTable.createTBody();
     t.forEach(function(d) {
-        var row = medalsTable.insertRow(-1);
+        var row = body.insertRow(-1);
         d.forEach(function(e) {
             var cell = row.insertCell(-1);
             cell.className = "cell-"+d[0].replace(" ", "_");
@@ -74,7 +75,20 @@ function updateTable(silver, gold) {
         }
     });
 
-    writeTable(table);
+    var body = document.getElementById('medals').tBodies[0];
+    for (var i = 0; i < table.length; i++) {
+        var row = body.rows[i];
+        var d = table[i];
+        for (var j = 0; j < d.length; j++) {
+            var cell = row.cells[j];
+            cell.className = "cell-"+d[0].replace(" ", "_");
+            if (isNaN(parseInt(d[j]))) {
+                cell.textContent = d[j];
+            } else {
+                cell.textContent = roundToHundredth(parseInt(d[j]));
+            }
+        }
+    }
 
     var goldDiv = document.getElementById('gold');
     goldDiv.innerHTML = "Gold Medals: " + roundToHundredth(gold*silver).toString();
@@ -100,8 +114,6 @@ function changeCSSStyle(selector, cssProp, cssVal) {
 
 
 d3.csv("medals.csv", function(data) {
-    console.log(data)
-
     data.forEach(function(d) {
         if (d["Total"] > 0) {
             //Convert to integers
@@ -109,8 +121,7 @@ d3.csv("medals.csv", function(data) {
             d['Silver'] = parseInt(d['Silver']);
             d['Bronze'] = parseInt(d['Bronze']);
             d['Total'] = parseInt(d['Total']);
-            d["points"] = parseInt(d["Total"]);
-            table.push([d['country'], d['Gold'], d['Silver'], d['Bronze'], d['Total']],);
+            table.push([d['country'], d['Gold'], d['Silver'], d['Bronze'], d['Total'], d["Total"]],);
         }
     })
 
@@ -125,7 +136,6 @@ d3.csv("medals.csv", function(data) {
             return b[2] - a[2];
         }
     });
-    console.log(table)
     writeTable(table);       
 });
 
@@ -153,7 +163,7 @@ d3.text("data/countries.csv", function(text) {
         img.addEventListener('mousemove', function(e) {
             var rect = img.getBoundingClientRect()
             var x = e.clientX - rect.left;
-            var y = e.clientY - rect.top;
+            var y = e.clientY - rect.top;;
 
             changeCSSStyle(".circle", "transform", `translate(${x}px, ${y+35}px)`);
 
@@ -162,6 +172,7 @@ d3.text("data/countries.csv", function(text) {
             silver = heatMapVals[xIdx];
             gold = heatMapVals[yIdx];
             updateTable(silver, gold);
+
         });
 
         img.addEventListener('mouseenter', function() {
@@ -169,6 +180,11 @@ d3.text("data/countries.csv", function(text) {
             img.style.cursor = "none";
             circle.classList.toggle("on");
             changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "lightgray");
+            
+            var elem = document.getElementById(".cell-"+d[0].replace(" ", "_"));
+            elem.scrollIntoView();
+
+            
         });
 
         img.addEventListener('mouseleave', function() {
