@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import warnings
 import matplotlib.pyplot as plt
-import seaborn as sns
+import seaborn as sns # type: ignore
 import matplotlib
 
 import time
