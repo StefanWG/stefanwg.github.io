@@ -173,6 +173,9 @@ d3.text("data/countries.csv", function(text) {
             gold = heatMapVals[yIdx];
             updateTable(silver, gold);
 
+            var elem = document.getElementsByClassName("cell-"+d[0].replace(" ", "_"))[0];
+            elem.scrollIntoView({behavior: "smooth", block: "center"});
+
         });
 
         img.addEventListener('mouseenter', function() {
@@ -181,8 +184,8 @@ d3.text("data/countries.csv", function(text) {
             circle.classList.toggle("on");
             changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "lightgray");
             
-            var elem = document.getElementById(".cell-"+d[0].replace(" ", "_"));
-            elem.scrollIntoView();
+            var elem = document.getElementsByClassName("cell-"+d[0].replace(" ", "_"))[0];
+            elem.scrollIntoView({behavior: "smooth", block: "center"});
 
             
         });
