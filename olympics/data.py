@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
 
+import time
+
 # Silence Warnings
 warnings.filterwarnings("ignore")
 
@@ -79,5 +81,3 @@ for country in country_arrays.keys():
     plt.tick_params(top=False, labeltop=False, bottom=False, labelbottom=False, left=False, labelleft=False)
     plt.savefig(f"plots/{country}.png", bbox_inches='tight', pad_inches=0)
     plt.close()
-    
-
