@@ -1,0 +1,83 @@
+#content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+h3 {
+    margin: auto;
+    text-align: center;
+}
+
+#sidebar {
+    width: 40%;
+}
+
+#main {
+    display: flex;
+}
+
+#content {
+    padding-top: 100px;
+    width: 60%;
+}
+
+#medals {
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+#medals td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+#medals th {
+    text-align: left;
+}
+
+#medals tr:first-of-type{
+    position: fixed;
+    padding-bottom: 8px;
+    background-color: white;
+    top: 50px;
+}
+.heatmapImg {
+    width: 200px;
+    height: 200px;
+}
+
+#medalValues {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+
+/* make medals values look like a pretty header */
+
+#medalValues div {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    width: 10%;
+}
+.heatmap {
+    padding: 20px;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: 2px black;
+    position: relative;
+    top: -12px;
+    left: 0px;
+    z-index: 1;
+    display: none;
+    /* cursor: crosshair; */
+}
+
+.on {
+    border-color: white;
+}
