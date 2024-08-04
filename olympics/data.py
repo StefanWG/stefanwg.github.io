@@ -8,7 +8,6 @@ import matplotlib
 # Silence Warnings
 warnings.filterwarnings("ignore")
 
-
 df = pd.read_csv('participants.csv', header=None)
 df.columns = ["country", "athletes"]
 # Strip whitespace from country names
@@ -36,28 +35,49 @@ country_names_map = {
     "United Republic of Tanzania": "Tanzania",
     "United States of America": "United States",
     "US Virgin Islands": "U.S. Virgin Islands",
+    "France*":"France"
 }
 
 # Replace country names with the correct ones
 df['country'] = df['country'].replace(country_names_map)
 
-url = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
-tables = pd.read_html(url)
-population = tables[0][["Location", "Population"]]
 
+# Get Medals Data
 url = "https://en.wikipedia.org/wiki/2024_Summer_Olympics_medal_table"
 tables = pd.read_html(url)
 medals = tables[4]
+medals['NOC'] = medals['NOC'].replace(country_names_map)
+medals.loc[medals['NOC'] == "France*", "NOC"]  = "France"
 
-population["Location"] = [t.split("(")[0].strip() for t in population["Location"]]
-
-merged = df.merge(population, left_on="country", right_on="Location")
-
-merged = merged.merge(medals, left_on="country", right_on="NOC", how="left")
+merged = df.merge(medals, left_on="country", right_on="NOC", how="left")
 merged.fillna(0, inplace=True)
-merged.drop(columns=["Location", "NOC", "Rank"], inplace=True)
-
-merged["athletes_per_million"] = merged["athletes"] / merged["Population"] * 1e6
-merged["medals_per_athlete"] = merged["Total"] / merged["athletes"]
+merged.drop(columns=["NOC", "Rank"], inplace=True)
 
 merged.to_csv("medals.csv", index=False)
+
+# Create Plots
+vals = np.concatenate([np.arange(1, 1.5, 0.01), np.arange(1.5, 10, 0.1), np.array([10, 15, 20, 25, 30, 40, 50, 60, 75, 100])]) 
+d = merged.loc[merged["Total"]>0]
+
+country_arrays = {k:np.zeros((len(vals),len(vals))) for k in d["country"]}
+for x in range(0, len(vals)):
+    for y in range(0,len(vals)):
+        bronze = 1 
+        silver = bronze * vals[x]
+        gold = silver * vals[y]
+        d = merged.loc[merged["Total"]>0]
+        d["points"] = d["Bronze"] * bronze + d["Silver"] * silver + d["Gold"] * gold
+        d["rank"] = d["points"].rank(method="min", ascending=False)
+        for i, row in d.iterrows():
+            country_arrays[row["country"]][y-1, x-1] = row["rank"]
+
+for country in country_arrays.keys():
+    arr = country_arrays[country][:-1].T[:-1].T
+    ax = sns.heatmap(arr, annot=False, fmt=".0f", cmap="viridis", cbar=False,
+        norm=matplotlib.colors.LogNorm( vmin=1, vmax=len(country_arrays)-20))
+    ax.invert_yaxis()
+    plt.tick_params(top=False, labeltop=False, bottom=False, labelbottom=False, left=False, labelleft=False)
+    plt.savefig(f"plots/{country}.png", bbox_inches='tight', pad_inches=0)
+    plt.close()
+    
+
