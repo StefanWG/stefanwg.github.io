@@ -2,7 +2,7 @@ name: Fetch Data
 
 on: 
   schedule:
-    - cron: "20 21 * * *"
+    - cron: "0 22 * * *"
 
 jobs:
   build:
@@ -23,3 +23,9 @@ jobs:
         run: python -m pip install --upgrade pip pandas numpy matplotlib seaborn lxml
       - name: Execute Python script # Run the run.py to get the latest data
         run: python data.py
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'StefanWG'
+          git config --global user.email 'stefan.walzergoldfeld@gmail.com'
+          git commit -am "Automated data fetch"
+          git push 
