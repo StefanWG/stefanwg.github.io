@@ -57,11 +57,16 @@ merged.drop(columns=["NOC", "Rank"], inplace=True)
 
 merged.to_csv("medals.csv", index=False)
 
+
+
 # Create Plots
 vals = np.concatenate([np.arange(1, 1.5, 0.01), np.arange(1.5, 10, 0.1), np.array([10, 15, 20, 25, 30, 40, 50, 60, 75, 100])]) 
 d = merged.loc[merged["Total"]>0]
 
 country_arrays = {k:np.zeros((len(vals),len(vals))) for k in d["country"]}
+
+pd.DataFrame([c for c in country_arrays.keys()]).to_csv("data/countries.csv", index=False, header=None)
+
 for x in range(0, len(vals)):
     for y in range(0,len(vals)):
         bronze = 1 
