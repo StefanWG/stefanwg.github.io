@@ -1,0 +1,121 @@
+.score {
+    text-align: center;
+    font-family: "Copperplate";
+    font-size:40px;
+    color: #8E7458;
+    width: 440px;
+}
+
+#newGame {
+    background-color: #8E7458;
+    font-family: "Copperplate";
+    font-size: 20px;
+    color: #f9f6f2;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    width: 440px;
+}
+
+table {
+    gap: 10px;
+    border-spacing: 10px;
+}
+
+.cell {
+    text-align: center;
+    font-family: "Copperplate";
+    font-size: 50px;
+    border-radius: 10px;
+    width:100px;
+    height:100px;
+    background-color: #8E7458;
+}
+
+/* CELL COLORS */
+
+._2 {
+    background-color: #eee4da;
+    color: #776e65
+}
+
+._4 {
+    background-color: #ede0c8;
+    color: #776e65
+}
+
+._8 {
+    background-color: #f2b179;
+    color: #f9f6f2
+}
+
+._16 {
+    background-color: #f59563;
+    color: #f9f6f2
+}
+
+._32 {
+    background-color: #f67c5f;
+    color: #f9f6f2
+}
+
+._64 {
+    background-color: #f65e3b;
+    color: #f9f6f2
+}
+
+._128 {
+    background-color: #edcf72;
+    color: #f9f6f2
+}
+
+._256 {
+    background-color: #edcc61;
+    color: #f9f6f2
+}
+
+._512 {
+    background-color: #edc850;
+    color: #f9f6f2
+}
+
+._1024 {
+    background-color: #edc53f;
+    color: #f9f6f2
+}
+
+._2048 {
+    background-color: #edc22e;
+    color: #f9f6f2
+}
+
+._4096 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
+
+._8192 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
+
+._16384 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
+
+._32768 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
+
+._65536 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
+
+._131072 {
+    background-color: #3c3a32;
+    color: #f9f6f2
+}
