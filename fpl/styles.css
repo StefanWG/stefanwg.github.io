@@ -1,0 +1,40 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr.hidden {
+    display: none;
+}
+
+.controls, .filter-buttons, .search-bar {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 8px 12px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+th.sortable:hover {
+    background-color: #e0e0e0;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 200px;
+    font-size: 14px;
+}
