@@ -1,0 +1,191 @@
+#graph-canvas {
+    width: 100%;
+    max-height: 100%;
+    background-color: lightblue;
+    margin-bottom: 30px;
+    grid-row: 1 / 4;
+    grid-column: 1 / 5;
+    margin: auto;
+    border-radius: 10px;
+}
+#graph-buttons {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-items: center;
+    width: 100%;
+    grid-column: 1 /5;
+    gap: 20px;
+    height: 100%;
+
+}
+
+.graph-button {
+    max-height: 50px;
+    width: 80%;
+    border-radius: 30px;
+    border: none;
+    margin-top: 10px;
+}
+
+#graph-buttons button:active {
+    box-shadow: inset 0px 0px 5px greenyellow;
+}
+      
+#graph-buttons button.active {
+    background-color: lightgreen;
+}
+
+html, body {
+    height:100%;
+    overflow: hidden;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    height: 100%;
+}
+
+#bio {
+    padding-left: 2.5%;
+    width: 95%;
+    grid-column: 1 / 3;
+    grid-row: 1;
+    display: flex;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+}
+
+#artist-img {
+    grid-row: 1;
+    grid-column: 1;
+    margin: auto;
+    max-height: 70%;
+    overflow: hidden;
+    max-height: 1fr;
+    border-radius: 10px;
+}
+#text {
+    margin-left: 5px;
+    grid-row: 1;
+    grid-column: 2;
+    text-align: left;
+    vertical-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#price-container {
+    width: 100%;
+    grid-row: 1;
+    grid-column: 3/5;
+    display: inline-block;
+    vertical-align: center;
+    margin: auto;
+}
+
+#price {
+    float:right;
+    text-align: right;
+    vertical-align: center;
+    margin: auto;
+    font-size: 600%;
+}
+
+#price-change-img {
+    max-width: 50px;
+    float:right;
+    vertical-align: center;
+    margin-top: 10px;
+}
+
+#graph-container {
+    width: 95%;
+    grid-column: 1 / 3;
+    grid-row:  2 / 5;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    margin: auto;
+
+}
+ 
+#right {
+    grid-column: 3;
+    grid-row: 1 / 5;
+    height: 85%;
+    width: 95%;
+    margin-top: 5%;
+    margin-right: 5%;
+
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+}
+
+#buy {
+    background-color: rgba(150, 150, 150, 0.849);;
+    flex-basis: 50%;
+}
+
+#news {
+    background-color: honeydew;
+    flex-basis: 50%;
+}
+
+#buy-tabs {
+    height: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tab {
+    background-color: wheat;
+    border: none;
+}
+
+.active-tab {
+    background-color: rgba(150, 150, 150, 0.849);
+}
+
+form {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    height: 100%;
+}
+.bsRow {
+    border-bottom: 1px rgb(94, 94, 94) solid;
+    font-size: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    vertical-align: middle;
+}
+
+
+.bsRow p {
+    vertical-align: middle;
+    line-height: 100%;
+}
+
+#numShares {
+    border: none;
+    height: 30px;
+    margin: auto;
+    border-radius: 10px;
+    text-align: right;
+}
+
+#btn {
+    justify-content: center;
+    height: 40px;
+    width: 100px;
+    background-color: var(--hover-menu-color);
+    border:none;
+    border-radius:100px;
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: 1/3;
+}

@@ -1,0 +1,115 @@
+
+:root {
+    --main-color:#474B4F;
+    --hover-menu-color: #61892F;
+    --active-menu-color: #86C232;
+    --dropdown-width: 8%;
+}
+
+body {
+    background-color: #6B6E70;
+    overflow: hidden;
+    height: 100%;
+}
+
+#menu {
+    display: flex;
+    position: relative;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-color);
+    font-family: "Papyrus";
+    /* margin-bottom: 25px; */
+    border-radius: 20px;
+}
+
+.menu-item {
+    float: left;
+    flex-grow: 1;
+}
+
+.menu-item a {
+    color: white;
+    text-decoration: none;
+    padding: 16px;
+    text-align: center;
+    display: inline-block;
+    border-right: 1px solid #bbb;
+}
+
+.menu-item a:hover:not(.active) {
+    background-color: var(--hover-menu-color);
+}
+
+#menu div:nth-last-child(2) {
+    float:right;
+    border-left: 1px solid #bbb;
+}
+
+#menu .menu-item:nth-of-type(1) a:hover {
+    border-radius: 20px 0px 0px 20px;
+}
+
+.prof:hover {
+    border-radius: 0px 20px 20px 0px;
+}
+
+#menu .menu-item:last-of-type a {
+    border-right: none;
+    min-width: 100px;
+}
+
+.dropdown-content {
+    display: none;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+    border-top: 1px solid #bbb;
+    display: inline-block;
+    padding: 16px;
+    min-width: 100px;
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--main-color);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1; 
+}
+/* .dropdown-content a:first-child {
+    border-top: none;
+} */
+
+.dropdown-content a:hover {
+    background-color: var(--hover-menu-color);
+    border-radius: none;
+    /* width: 100%; */
+}
+
+.active {
+    background-color: var(--active-menu-color);
+}
+
+.menu-item:first-of-type a.active {
+    border-radius: 20px 0px 0px 20px;
+}
+
+.title {
+    flex-grow: 5;
+    text-align: center;
+    width: 100%;
+    color: rgb(35, 180, 79);
+    font-weight: bolder;
+    padding: 0;
+}
