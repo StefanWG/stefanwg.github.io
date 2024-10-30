@@ -24,7 +24,7 @@ connectButton.addEventListener('click', () => {
     const codeChallenge = base64encode(hashed);
 
     const clientId = '0e7c6f0135634824a2a79000413744d6';
-    const redirectUri = 'http://localhost/connected.html';
+    const redirectUri = 'https://stefanwg.github.io/music/connected.html';
 
     const scope = 'user-read-private user-read-email';
     const authUrl = new URL("https://accounts.spotify.com/authorize")
