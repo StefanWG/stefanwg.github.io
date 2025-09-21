@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sortable Table with CSV Data, Filters, and Search</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="utils.js" defer></script>
+    <script src="standings.js" defer></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+
 </head>
 <body>
-    <div class="controls">
-        <button onclick="undoLastAction()">Undo Last Action</button>
-        <button onclick="toggleCheckedRows()">Show/Hide Checked Rows</button>
-    </div>
-
-    <div class="filter-buttons">
-        <button onclick="filterByPosition('GK')">GK</button>
-        <button onclick="filterByPosition('DEF')">DEF</button>
-        <button onclick="filterByPosition('MID')">MID</button>
-        <button onclick="filterByPosition('FWD')">FWD</button>
-        <button onclick="filterByPosition('')">Show All</button>
-    </div>
-
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search for players..." onkeyup="searchTable()">
-    </div>
-
-    <table id="myTable">
+      <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">FPL</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Standings</a></li>
+                <li><a href="matches.html" class="nav-link">Matches</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="table-container">
+         <table id="standings" class="modern-table" style="width:100%">
         <thead>
             <tr>
-                <th>Checkbox</th>
-                <!-- Headers will be dynamically inserted here -->
+                <th>Team</th>
+                <th>Points</th>
+                <th>W</th>
+                <th>L</th>
+                <th>D</th>
+                <th>GF</th>
+                <th>GA</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Rows will be dynamically inserted here -->
         </tbody>
     </table>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="script.js"></script>
+    </div>
 </body>
 </html>
