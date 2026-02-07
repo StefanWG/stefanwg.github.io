@@ -3,6 +3,7 @@ name: Fetch Data
 on: 
   schedule:
      - cron: "52 * * * *"
+  workflow_dispatch: 
 
 jobs:
   build:
