@@ -96,109 +96,123 @@ function updateTable(silver, gold) {
     silverDiv.innerHTML = "Silver: " + roundToHundredth(silver).toString();
 }
 
-var ssMain = 1;
-var cssRules = (document.all) ? 'rules': 'cssRules';
+// 1. Find the correct local stylesheet index dynamically
+var ssMain = Array.from(document.styleSheets).findIndex(sheet => 
+    sheet.href && sheet.href.includes('content.css')
+);
 
-function changeCSSStyle(selector, cssProp, cssVal) {
+window.onload = function() {
 
-  for (i=0, len=document.styleSheets[ssMain][cssRules].length; i<len; i++) {
+    // If not found (e.g., style is internal <style> tags), default to 0
+    if (ssMain === -1) ssMain = 0;
 
-    if (document.styleSheets[ssMain][cssRules][i].selectorText === selector) {
-      document.styleSheets[ssMain][cssRules][i].style[cssProp] = cssVal;
-      return;
+    var cssRules = (document.all) ? 'rules': 'cssRules';
+
+    function changeCSSStyle(selector, cssProp, cssVal) {
+        try {
+            var sheet = document.styleSheets[ssMain];
+            var rules = sheet[cssRules];
+
+            for (var i = 0; i < rules.length; i++) {
+                if (rules[i].selectorText === selector) {
+                    rules[i].style[cssProp] = cssVal;
+                    return;
+                }
+            }
+            // If the selector doesn't exist yet, insert it
+            sheet.insertRule(selector + ' { ' + cssProp + ': ' + cssVal + '; }', rules.length);
+        } catch (e) {
+            console.warn("Could not access stylesheet rules: ", e);
+        }
     }
-  }
-  var sheet = document.styleSheets[ssMain];
-  sheet.insertRule(selector + ' { ' + cssProp + ': ' + cssVal + '; }', sheet.cssRules.length);
+
+
+    d3.csv("medals.csv", function(data) {
+        data.forEach(function(d) {
+            if (d["Total"] > 0) {
+                //Convert to integers
+                d['Gold'] = parseInt(d['Gold']);
+                d['Silver'] = parseInt(d['Silver']);
+                d['Bronze'] = parseInt(d['Bronze']);
+                d['Total'] = parseInt(d['Total']);
+                table.push([d['country'], d['Gold'], d['Silver'], d['Bronze'], d['Total'], d["Total"]],);
+            }
+        })
+
+        // Sort by total number of medals
+
+        table.sort(function(a, b) {
+            if (b[4] -a[4] != 0) {
+                return b[4]-a[4];
+            } else if (b[1] - a[1] != 0) {
+                return b[1] - a[1];
+            } else {
+                return b[2] - a[2];
+            }
+        });
+        writeTable(table);       
+    });
+
+    d3.text("data/countries.csv", function(text) {
+        table.forEach(function(d) {
+            var div = document.createElement('div');
+            div.id = 'heatmap_' + d[0].replace(" ", "_");
+            div.className = 'heatmap';
+            content.appendChild(div);
+
+            var circle = document.createElement('div');
+            circle.className = 'circle';
+            div.appendChild(circle);
+
+
+            var img = document.createElement('img');
+            img.className = "heatmapImg"
+            img.src = 'plots/' + d[0] + '.png';
+
+            var title = document.createElement('h3');
+            title.textContent = d[0];
+            div.appendChild(title)
+            div.appendChild(img);
+
+            // ... existing range and setup code ...
+
+            img.addEventListener('mousemove', function(e) {
+                var rect = img.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+
+                // Apply position to ALL circles
+                changeCSSStyle(".circle", "transform", `translate(${x}px, ${y}px)`);
+
+                // Your original index math
+                var xIdx = Math.floor(x / rect.width * heatMapVals.length);
+                var yIdx = heatMapVals.length - Math.floor(y / rect.height * heatMapVals.length);
+                
+                // Clamp to prevent errors at the very edges
+                xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
+                yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
+
+                var silver = heatMapVals[xIdx];
+                var gold = heatMapVals[yIdx];
+                updateTable(silver, gold);
+
+                // Scroll table to the current country
+                var countryClass = "cell-" + d[0].replace(" ", "_");
+                var elem = document.getElementsByClassName(countryClass)[0];
+                if (elem) elem.scrollIntoView({behavior: "auto", block: "center"});
+            });
+
+            img.addEventListener('mouseenter', function() {
+                changeCSSStyle(".circle", "display", "block");
+                // Use a subtle glassy highlight instead of solid gray
+                changeCSSStyle(".cell-" + d[0].replace(" ", "_"), "background-color", "rgba(255,255,255,0.1)");
+            });
+
+            img.addEventListener('mouseleave', function() {
+                changeCSSStyle(".circle", "display", "none");
+                changeCSSStyle(".cell-" + d[0].replace(" ", "_"), "background-color", "transparent");
+            });
+        });
+    });
+
 }
-
-
-d3.csv("medals.csv", function(data) {
-    data.forEach(function(d) {
-        if (d["Total"] > 0) {
-            //Convert to integers
-            d['Gold'] = parseInt(d['Gold']);
-            d['Silver'] = parseInt(d['Silver']);
-            d['Bronze'] = parseInt(d['Bronze']);
-            d['Total'] = parseInt(d['Total']);
-            table.push([d['country'], d['Gold'], d['Silver'], d['Bronze'], d['Total'], d["Total"]],);
-        }
-    })
-
-     // Sort by total number of medals
-
-    table.sort(function(a, b) {
-        if (b[4] -a[4] != 0) {
-            return b[4]-a[4];
-        } else if (b[1] - a[1] != 0) {
-            return b[1] - a[1];
-        } else {
-            return b[2] - a[2];
-        }
-    });
-    writeTable(table);       
-});
-
-d3.text("data/countries.csv", function(text) {
-    table.forEach(function(d) {
-        var div = document.createElement('div');
-        div.id = 'heatmap_' + d[0].replace(" ", "_");
-        div.className = 'heatmap';
-        content.appendChild(div);
-
-        var circle = document.createElement('div');
-        circle.className = 'circle';
-        div.appendChild(circle);
-
-
-        var img = document.createElement('img');
-        img.className = "heatmapImg"
-        img.src = 'plots/' + d[0] + '.png';
-
-        var title = document.createElement('h3');
-        title.textContent = d[0];
-        div.appendChild(title)
-        div.appendChild(img);
-
-        img.addEventListener('mousemove', function(e) {
-            var rect = img.getBoundingClientRect()
-            var x = e.clientX - rect.left;
-            var y = e.clientY - rect.top;;
-
-            changeCSSStyle(".circle", "transform", `translate(${x}px, ${y+35}px)`);
-
-            xIdx = Math.floor(x / rect.width * heatMapVals.length);
-            yIdx = heatMapVals.length - Math.floor(y / rect.height * heatMapVals.length);
-            silver = heatMapVals[xIdx];
-            gold = heatMapVals[yIdx];
-            updateTable(silver, gold);
-
-            var elem = document.getElementsByClassName("cell-"+d[0].replace(" ", "_"))[0];
-            elem.scrollIntoView({behavior: "smooth", block: "center"});
-
-        });
-
-        img.addEventListener('mouseenter', function() {
-            changeCSSStyle(".circle","display", "block");
-            img.style.cursor = "none";
-            circle.classList.toggle("on");
-            changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "lightgray");
-            
-            var elem = document.getElementsByClassName("cell-"+d[0].replace(" ", "_"))[0];
-            elem.scrollIntoView({behavior: "smooth", block: "center"});
-
-            
-        });
-
-        img.addEventListener('mouseleave', function() {
-            changeCSSStyle(".circle","display", "none");
-            img.style.cursor = "pointer";
-            circle.classList.toggle("on");
-            changeCSSStyle(".cell-"+d[0].replace(" ", "_"),"background-color", "#f4f4f4");
-        });
-
-
-    });
-});
-
-

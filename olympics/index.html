@@ -1,43 +1,47 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olympic Medal Tracker</title>
-    <script type="text/javascript" src="d3/d3.v3.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.34.0.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="icon" href="icon.png">
-    <script src="images.js" defer></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+        <link rel="icon" href="assets/icon.png" type="image/png">
+
 </head>
 <body>
-    <div id="header">
-        <img src="medals.jpg" id="medalImage">
-        <div id="medalValues">
-            <div id="gold">Gold: 1</div>
-            <div id="silver">Silver: 1</div>
-            <div id="bronze">Bronze: 1</div>
-        </div>
-        <div id="description">
-            This is a comparison of rankings in the medal table 
-            based on the value of the medals. The value of the
-            medals can be changed by hovering on the images.
-            As you go to the right, gold medals become more
-            valuable relative to silver medals, and as you go 
-            up silver medals become more valuable relative 
-            to bronze medals.
-        </div>
-    </div>
-    <div id="main">
-        <div id="content">
-        </div>
-        <div id="sidebar">
-            <table id="medals"></table>
-        </div>
-    </div>  
+    <div class="background-glow"></div>
+    
+    <nav>
+        <div class="logo">OLYMPIC<span>TRACKER</span></div>
+        <div class="status-tag">● LIVE UPDATES</div>
+    </nav>
 
+    <main class="hero">
+        <div class="hero-text">
+            <h1>Global Medal <br><span class="highlight">Standings</span></h1>
+            <p>Real-time data visualization of the world's greatest athletic stages.</p>
+        </div>
+
+        <section class="card-grid">
+            <a href="summer_2024/index.html" class="glass-card summer">
+                <div class="event-year">2024</div>
+                <div class="event-details">
+                    <h2>SUMMER</h2>
+                    <p>Paris • France</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="winter_2026/index.html" class="glass-card winter">
+                <div class="event-year">2026</div>
+                <div class="event-details">
+                    <h2>WINTER</h2>
+                    <p>Milano Cortina • Italy</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+        </section>
+    </main>
 </body>
 </html>
-
-<!-- Make plots using python save as images 
-triple size and then filter to get smooth image? -->

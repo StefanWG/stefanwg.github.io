@@ -1,0 +1,72 @@
+/* Ensure the page fills the screen without margins */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0b0e14; /* Match your background */
+}
+
+#main {
+    display: flex;
+    width: 100vw; /* Use Viewport Width */
+    padding-top: 110px;
+    height: calc(100vh - 110px);
+}
+
+#content {
+    width: 65%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    padding: 30px;
+    gap: 20px;
+}
+
+.heatmap {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+}
+
+.heatmapImg {
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    cursor: none;
+}
+
+/* content.css */
+.circle {
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    position: absolute;
+    
+    /* ANCHOR: These must match the distance from div top/left to the image top/left */
+    /* Adjust these pixels if you change your h3 size or heatmap padding */
+    top: 48px;  
+    left: 15px; 
+    
+    z-index: 100;
+    pointer-events: none; /* Crucial: ensures mouse events 'pass through' the dot */
+    background: rgba(255, 255, 255, 0.4);
+    display: none;
+    
+    /* CENTERING: Offsets the circle so its center is under the mouse tip */
+    margin-top: 0px;
+    margin-left: -6px;
+}
+
+.heatmap h3 {
+    color: #fde725; /* Viridis yellow highlight */
+    margin-bottom: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

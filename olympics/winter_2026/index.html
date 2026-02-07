@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Olympic Medal Tracker</title>
+    <script type="text/javascript" src="../d3/d3.v3.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/header.css">
+    <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="../css/content.css">
+    <script src="../images.js" defer></script>
+    <link rel="icon" href="../assets/icon.png" type="image/png">
+
+</head>
+<body>
+    <header id="header">
+        <div class="logo-area">
+            <h2 style="margin:0; font-weight:800; color:var(--highlight)">WINTER 2026</h2>
+            <p style="margin:0; font-size:0.7rem; opacity:0.6; letter-spacing:2px">MILANO CORTINA</p>
+        </div>
+        
+        <div id="medalValues" style="margin-left:auto">
+            <div id="gold">Gold: 1</div>
+            <div id="silver">Silver: 1</div>
+            <div id="bronze">Bronze: 1</div>
+        </div>
+        
+        <div id="description">
+            <strong>Dynamic Ranking Engine:</strong> Hover over a country's heatmap to adjust medal valuations. 
+            The Y-axis scales <b>Gold</b> value, while the X-axis scales <b>Silver</b>. 
+            Watch the live leaderboard shift in real-time.
+        </div>
+    </header>
+
+    <main id="main">
+        <section id="content"></section>
+        <aside id="sidebar">
+            <table id="medals"></table>
+        </aside>
+    </main>
+</body>
+</html>

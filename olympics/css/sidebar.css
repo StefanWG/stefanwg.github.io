@@ -1,0 +1,39 @@
+#sidebar {
+    width: 35%;
+    background: rgba(20, 24, 33, 0.85);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+#medals {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#medals th {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    color: #fde725;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#medals td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+    color: #ffffff; /* Bright white for primary data */
+}
+
+/* Optional: Make the country name stand out */
+#medals td:first-child {
+    color: #fde725; /* Yellow highlight for country names */
+    font-weight: 600;
+}
