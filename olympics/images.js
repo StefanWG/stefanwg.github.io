@@ -167,7 +167,7 @@ window.onload = function() {
 
             var img = document.createElement('img');
             img.className = "heatmapImg"
-            img.src = 'plots/' + d[0] + '.png';
+            img.src = 'plots/' + d[0] + '.png?v=' + new Date().getTime();
 
             var title = document.createElement('h3');
             title.textContent = d[0];
