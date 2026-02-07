@@ -37,3 +37,24 @@
     color: #fde725; /* Yellow highlight for country names */
     font-weight: 600;
 }
+
+/* Updated Last Synced Styles */
+/* Fix for the "small bubble" timestamp */
+.timestamp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#update-timestamp {
+    color: #ffffff !important; /* Forces text to be white */
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    white-space: nowrap; /* Prevents text from wrapping into a bubble shape */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}

@@ -1,6 +1,9 @@
 var content = document.getElementById('content');
 var table = [];
 
+// Cache-buster: Unique version string for every page load
+const version = new Date().getTime();
+
 function range(start, end, step) {
     const arr = [];
     for (let i = start; i < end; i += step) {
@@ -12,49 +15,33 @@ function range(start, end, step) {
 const range1 = range(1, 1.5, 0.01);
 const range2 = range(1.5, 10, 0.1);
 const array3 = [10, 15, 20, 25, 30, 40, 50, 60, 75, 100];
-
 const heatMapVals = range1.concat(range2, array3);
 
 const roundToHundredth = (value) => {
     return Number(value.toFixed(2));
-  };
+};
 
 function writeTable(t) {
     var medalsTable = document.getElementById('medals');
     medalsTable.innerHTML = '';
-    // Add header row
     var header = medalsTable.createTHead();
     var headerRow = header.insertRow(0);
-    var headerCell = document.createElement('th');
-    headerCell.textContent = 'Country';
-    headerRow.appendChild(headerCell);
-    headerCell = document.createElement('th');
-    headerCell.textContent = 'Gold';
-    headerRow.appendChild(headerCell);
-    headerCell = document.createElement('th');
-    headerCell.textContent = 'Silver';
-    headerRow.appendChild(headerCell);
-    headerCell = document.createElement('th');
-    headerCell.textContent = 'Bronze';
-    headerRow.appendChild(headerCell);
-    headerCell = document.createElement('th');
-    headerCell.textContent = 'Total';
-    headerRow.appendChild(headerCell);
-    headerCell = document.createElement('th');
-    headerCell.textContent = 'Points';
-    headerRow.appendChild(headerCell);
-
+    ['Country', 'Gold', 'Silver', 'Bronze', 'Total', 'Points'].forEach(text => {
+        var headerCell = document.createElement('th');
+        headerCell.textContent = text;
+        headerRow.appendChild(headerCell);
+    });
 
     var body = medalsTable.createTBody();
     t.forEach(function(d) {
         var row = body.insertRow(-1);
         d.forEach(function(e) {
             var cell = row.insertCell(-1);
-            cell.className = "cell-"+d[0].replace(" ", "_");
-            if (isNaN(parseInt(e))) {
+            cell.className = "cell-" + d[0].replace(/\s+/g, "_");
+            if (isNaN(parseInt(e)) || typeof e === 'string') {
                 cell.textContent = e;
             } else {
-                cell.textContent = roundToHundredth(parseInt(e));
+                cell.textContent = roundToHundredth(e);
             }
         });
     });
@@ -62,157 +49,145 @@ function writeTable(t) {
 
 function updateTable(silver, gold) {
     table.forEach(function(d) {
-        d[5] = d[1] * gold*silver + d[2] * silver + d[3];
+        d[5] = d[1] * gold * silver + d[2] * silver + d[3];
     });
 
-    table.sort(function(a, b) {
-        if (b[5] - a[5] != 0) {
-            return b[5] - a[5];
-        } else if (b[1] - a[1] != 0) {
-            return b[1] - a[1];
-        } else {
-            return b[2] - a[2];
-        }
-    });
+    table.sort((a, b) => (b[5] - a[5]) || (b[1] - a[1]) || (b[2] - a[2]));
 
     var body = document.getElementById('medals').tBodies[0];
+    if (!body) return;
+
     for (var i = 0; i < table.length; i++) {
         var row = body.rows[i];
         var d = table[i];
         for (var j = 0; j < d.length; j++) {
             var cell = row.cells[j];
-            cell.className = "cell-"+d[0].replace(" ", "_");
-            if (isNaN(parseInt(d[j]))) {
-                cell.textContent = d[j];
-            } else {
-                cell.textContent = roundToHundredth(parseInt(d[j]));
-            }
+            cell.className = "cell-" + d[0].replace(/\s+/g, "_");
+            cell.textContent = isNaN(parseInt(d[j])) ? d[j] : roundToHundredth(d[j]);
         }
     }
 
-    var goldDiv = document.getElementById('gold');
-    goldDiv.innerHTML = "Gold: " + roundToHundredth(gold*silver).toString();
-    var silverDiv = document.getElementById('silver');
-    silverDiv.innerHTML = "Silver: " + roundToHundredth(silver).toString();
+    document.getElementById('gold').innerHTML = "Gold: " + roundToHundredth(gold * silver);
+    document.getElementById('silver').innerHTML = "Silver: " + roundToHundredth(silver);
 }
 
-// 1. Find the correct local stylesheet index dynamically
 var ssMain = Array.from(document.styleSheets).findIndex(sheet => 
     sheet.href && sheet.href.includes('content.css')
 );
 
 window.onload = function() {
-
-    // If not found (e.g., style is internal <style> tags), default to 0
     if (ssMain === -1) ssMain = 0;
-
-    var cssRules = (document.all) ? 'rules': 'cssRules';
+    var cssRules = (document.all) ? 'rules' : 'cssRules';
 
     function changeCSSStyle(selector, cssProp, cssVal) {
         try {
             var sheet = document.styleSheets[ssMain];
             var rules = sheet[cssRules];
-
             for (var i = 0; i < rules.length; i++) {
                 if (rules[i].selectorText === selector) {
                     rules[i].style[cssProp] = cssVal;
                     return;
                 }
             }
-            // If the selector doesn't exist yet, insert it
             sheet.insertRule(selector + ' { ' + cssProp + ': ' + cssVal + '; }', rules.length);
         } catch (e) {
-            console.warn("Could not access stylesheet rules: ", e);
+            console.warn("Stylesheet access restricted: ", e);
         }
     }
 
-
-    d3.csv("medals.csv", function(data) {
+    // Load Medals with Cache Buster
+    d3.csv("medals.csv?v=" + version, function(data) {
         data.forEach(function(d) {
-            if (d["Total"] > 0) {
-                //Convert to integers
-                d['Gold'] = parseInt(d['Gold']);
-                d['Silver'] = parseInt(d['Silver']);
-                d['Bronze'] = parseInt(d['Bronze']);
-                d['Total'] = parseInt(d['Total']);
-                table.push([d['country'], d['Gold'], d['Silver'], d['Bronze'], d['Total'], d["Total"]],);
+            if (parseInt(d["Total"]) > 0) {
+                table.push([d['country'], parseInt(d['Gold']), parseInt(d['Silver']), parseInt(d['Bronze']), parseInt(d['Total']), parseInt(d["Total"])]);
+            }
+        });
+        table.sort((a, b) => (b[4] - a[4]) || (b[1] - a[1]) || (b[2] - a[2]));
+        writeTable(table);      
+        
+       fetch('https://api.github.com/repos/StefanWG/stefanwg.github.io/commits?path=olympics/winter_2026/medals.csv&page=1&per_page=1')
+        .then(response => response.json())
+        .then(commits => {
+            if (commits && commits.length > 0) {
+                const lastUpdate = new Date(commits[0].commit.author.date);
+                const timeString = lastUpdate.toLocaleString([], { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                document.getElementById('update-timestamp').textContent = "Last Updated: " + timeString;
             }
         })
-
-        // Sort by total number of medals
-
-        table.sort(function(a, b) {
-            if (b[4] -a[4] != 0) {
-                return b[4]-a[4];
-            } else if (b[1] - a[1] != 0) {
-                return b[1] - a[1];
-            } else {
-                return b[2] - a[2];
-            }
+        .catch(err => {
+            console.warn("Could not fetch GitHub timestamp:", err);
+            document.getElementById('update-timestamp').textContent = "Last Synced: Just now";
         });
-        writeTable(table);       
-    });
 
-    d3.text("data/countries.csv", function(text) {
-        table.forEach(function(d) {
-            var div = document.createElement('div');
-            div.id = 'heatmap_' + d[0].replace(" ", "_");
-            div.className = 'heatmap';
-            content.appendChild(div);
-
-            var circle = document.createElement('div');
-            circle.className = 'circle';
-            div.appendChild(circle);
-
-
-            var img = document.createElement('img');
-            img.className = "heatmapImg"
-            img.src = 'plots/' + d[0] + '.png?v=' + new Date().getTime();
-
-            var title = document.createElement('h3');
-            title.textContent = d[0];
-            div.appendChild(title)
-            div.appendChild(img);
-
-            // ... existing range and setup code ...
-
-            img.addEventListener('mousemove', function(e) {
-                var rect = img.getBoundingClientRect();
-                var x = e.clientX - rect.left;
-                var y = e.clientY - rect.top;
-
-                // Apply position to ALL circles
-                changeCSSStyle(".circle", "transform", `translate(${x}px, ${y}px)`);
-
-                // Your original index math
-                var xIdx = Math.floor(x / rect.width * heatMapVals.length);
-                var yIdx = heatMapVals.length - Math.floor(y / rect.height * heatMapVals.length);
+        // Load Countries and build heatmaps
+        d3.text("data/countries.csv?v=" + version, function(text) {
+            table.forEach(function(d) {
+                const countryID = d[0].replace(/\s+/g, "_");
                 
-                // Clamp to prevent errors at the very edges
-                xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
-                yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
+                var div = document.createElement('div');
+                div.id = 'heatmap_' + countryID;
+                div.className = 'heatmap';
+                
+                var title = document.createElement('h3');
+                title.textContent = d[0];
+                div.appendChild(title);
 
-                var silver = heatMapVals[xIdx];
-                var gold = heatMapVals[yIdx];
-                updateTable(silver, gold);
+                var circle = document.createElement('div');
+                circle.className = 'circle';
+                div.appendChild(circle);
 
-                // Scroll table to the current country
-                var countryClass = "cell-" + d[0].replace(" ", "_");
-                var elem = document.getElementsByClassName(countryClass)[0];
-                if (elem) elem.scrollIntoView({behavior: "auto", block: "center"});
-            });
+                var img = document.createElement('img');
+                img.className = "heatmapImg";
+                
+                // Add a loading class to the div
+                div.classList.add('loading-img');
 
-            img.addEventListener('mouseenter', function() {
-                changeCSSStyle(".circle", "display", "block");
-                // Use a subtle glassy highlight instead of solid gray
-                changeCSSStyle(".cell-" + d[0].replace(" ", "_"), "background-color", "rgba(255,255,255,0.1)");
-            });
+                // SAFETY: Wait for image to actually load before enabling interactions
+                img.onload = function() {
+                    div.classList.remove('loading-img');
+                    
+                    img.addEventListener('mousemove', function(e) {
+                        var rect = img.getBoundingClientRect();
+                        if (rect.width === 0) return;
 
-            img.addEventListener('mouseleave', function() {
-                changeCSSStyle(".circle", "display", "none");
-                changeCSSStyle(".cell-" + d[0].replace(" ", "_"), "background-color", "transparent");
+                        var x = e.clientX - rect.left;
+                        var y = e.clientY - rect.top;
+
+                        changeCSSStyle(".circle", "transform", `translate(${x}px, ${y}px)`);
+
+                        var xIdx = Math.floor((x / rect.width) * heatMapVals.length);
+                        var yIdx = heatMapVals.length - Math.floor((y / rect.height) * heatMapVals.length);
+                        
+                        xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
+                        yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
+
+                        updateTable(heatMapVals[xIdx], heatMapVals[yIdx]);
+
+                        var countryClass = "cell-" + countryID;
+                        var elem = document.getElementsByClassName(countryClass)[0];
+                        if (elem) elem.scrollIntoView({behavior: "auto", block: "center"});
+                    });
+                };
+
+                img.src = 'plots/' + d[0] + '.png?v=' + version;
+                div.appendChild(img);
+                content.appendChild(div);
+
+                img.addEventListener('mouseenter', function() {
+                    changeCSSStyle(".circle", "display", "block");
+                    changeCSSStyle(".cell-" + countryID, "background-color", "rgba(255,255,255,0.1)");
+                });
+
+                img.addEventListener('mouseleave', function() {
+                    changeCSSStyle(".circle", "display", "none");
+                    changeCSSStyle(".cell-" + countryID, "background-color", "transparent");
+                });
             });
         });
-    });
-
-}
+    });  
+};
