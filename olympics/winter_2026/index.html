@@ -4,11 +4,21 @@
 <head>
     <title>Olympic Medal Tracker</title>
     <script type="text/javascript" src="../d3/d3.v3.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/header.css">
-    <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="../css/content.css">
     <script src="../images.js" defer></script>
     <link rel="icon" href="../assets/icon.png" type="image/png">
+    <script>
+        (function() {
+            const version = new Date().getTime();
+            const sheets = ['sidebar.css', 'header.css', 'content.css'];
+            
+            sheets.forEach(css => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = css + '?v=' + version;
+                document.head.appendChild(link);
+            });
+        })();
+    </script>
 
 </head>
 <body>
