@@ -34,23 +34,28 @@
     <main id="main">
         <section id="content"></section>
         <aside id="sidebar">
-            <table id="medals"></table>
-
+            <div class="medals-scroll-container">
+                <table id="medals"></table>
+            </div>
             <div class="slider-container">
                 <div class="slider-group">
-                    <label for="gold-slider">Gold Multiplier</label>
-                    <input type="range" id="gold-slider" min="0" max="145" step="1" value="0">
-                    <span id="gold-val">1.0</span>
+                    <div class="slider-header">
+                        <label>Gold Multiplier</label>
+                        <span id="gold-val" class="multiplier-display">1.00</span>
+                    </div>
+                    <input type="range" id="gold-slider" min="0" max="145" step="1" value="0" class="modern-slider">
                 </div>
                 
                 <div class="slider-group">
-                    <label for="silver-slider">Silver Multiplier</label>
-                    <input type="range" id="silver-slider" min="0" max="145" step="1" value="0">
-                    <span id="silver-val">1.0</span>
+                    <div class="slider-header">
+                        <label>Silver Multiplier</label>
+                        <span id="silver-val" class="multiplier-display">1.00</span>
+                    </div>
+                    <input type="range" id="silver-slider" min="0" max="145" step="1" value="0" class="modern-slider">
                 </div>
-            </div>
 
-            <p id="update-timestamp" style="font-size: 0.8rem; opacity: 0.6;"></p>
+                <button id="reset-btn" class="glass-button">Reset to 1.0x</button>
+            </div>
         </aside>
     </main>
 </body>

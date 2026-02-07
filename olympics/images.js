@@ -1,5 +1,24 @@
 var content = document.getElementById('content');
 var table = [];
+//Placeholder values until we load the actual data
+var width = 300;
+var height = 300;
+
+// Get references to the sliders and labels
+const goldSlider = document.getElementById('gold-slider');
+const silverSlider = document.getElementById('silver-slider');
+const resetBtn = document.getElementById('reset-btn');
+const goldLabel = document.getElementById('gold-val');
+const silverLabel = document.getElementById('silver-val');
+
+
+var ssMain = Array.from(document.styleSheets).findIndex(sheet => 
+    sheet.href && sheet.href.includes('content.css')
+);
+
+if (ssMain === -1) ssMain = 0;
+var cssRules = (document.all) ? 'rules' : 'cssRules';
+
 
 // Cache-buster: Unique version string for every page load
 const version = new Date().getTime();
@@ -12,6 +31,49 @@ function range(start, end, step) {
     return arr;
 }
 
+function compute_idx_in_px_x(x, rect) {
+    var xIdx = Math.floor((x / rect.width) * heatMapVals.length);    
+    xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
+    return xIdx
+}
+
+function compute_idx_in_px_y(y, rect) {
+    var yIdx = heatMapVals.length - Math.floor((y / rect.height) * heatMapVals.length);
+    yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
+    return yIdx;
+}
+
+function compute_val_from_idx_x(idx, rect) {
+    return (idx / heatMapVals.length) * rect.width;
+}
+
+function compute_val_from_idx_y(yIdx, rect) {
+    // 1. Normalize the index (0 to 1)
+    var normalizedIdx = yIdx / (heatMapVals.length - 1);
+    
+    // 2. Invert it because your yIdx math is inverted 
+    // (HeatMapVals.length at y=0, 0 at y=rect.height)
+    var yPx = (1 - normalizedIdx) * rect.height;
+    
+    return yPx;
+}
+
+function changeCSSStyle(selector, cssProp, cssVal) {
+    try {
+        var sheet = document.styleSheets[ssMain];
+        var rules = sheet[cssRules];
+        for (var i = 0; i < rules.length; i++) {
+            if (rules[i].selectorText === selector) {
+                rules[i].style[cssProp] = cssVal;
+                return;
+            }
+        }
+        sheet.insertRule(selector + ' { ' + cssProp + ': ' + cssVal + '; }', rules.length);
+    } catch (e) {
+        console.warn("Stylesheet access restricted: ", e);
+    }
+}
+
 const range1 = range(1, 1.5, 0.01);
 const range2 = range(1.5, 10, 0.1);
 const array3 = [10, 15, 20, 25, 30, 40, 50, 60, 75, 100];
@@ -20,14 +82,6 @@ const heatMapVals = range1.concat(range2, array3);
 const roundToHundredth = (value) => {
     return Number(value.toFixed(2));
 };
-
-
-
-// Get references to the sliders and labels
-const goldSlider = document.getElementById('gold-slider');
-const silverSlider = document.getElementById('silver-slider');
-const goldLabel = document.getElementById('gold-val');
-const silverLabel = document.getElementById('silver-val');
 
 function getArrayIndex(val) {
     return heatMapVals.indexOf(val);
@@ -102,9 +156,6 @@ function updateTable(silver, gold, countryID) {
     }
 }
 
-var ssMain = Array.from(document.styleSheets).findIndex(sheet => 
-    sheet.href && sheet.href.includes('content.css')
-);
 
 function handleSliderChange() {
 
@@ -115,36 +166,29 @@ function handleSliderChange() {
     
     goldLabel.textContent = gold.toFixed(2);
     silverLabel.textContent = silver.toFixed(2);
-        
-    // Hide all circles since we aren't hovering a specific plot
-    // const circles = document.querySelectorAll('.circle');
-    // circles.forEach(c => c.style.display = 'none');
+
+    // Update the heatmap circles based on the slider values
+    changeCSSStyle(".circle", "display", "block");
+
+    //4. Update the heatmap circles based on the new slider values
+    changeCSSStyle(".circle", "display", "block");
+    var x = compute_val_from_idx_x(parseInt(silverSlider.value), {width: width}); // Assuming heatmap width is 300px
+    var y = compute_val_from_idx_y(parseInt(goldSlider.value), {height: height}); // Assuming heatmap height is 300px
+
+    changeCSSStyle(".circle", "transform", `translate(${x}px, ${y}px)`);
 }
 
 goldSlider.addEventListener('input', handleSliderChange);
 silverSlider.addEventListener('input', handleSliderChange);
 
+resetBtn.onclick = () => {
+    goldSlider.value = 0;
+    silverSlider.value = 0;
+    handleSliderChange();
+};
+
 // Load data and build heatmaps after page load
 window.onload = function() {
-    if (ssMain === -1) ssMain = 0;
-    var cssRules = (document.all) ? 'rules' : 'cssRules';
-
-    function changeCSSStyle(selector, cssProp, cssVal) {
-        try {
-            var sheet = document.styleSheets[ssMain];
-            var rules = sheet[cssRules];
-            for (var i = 0; i < rules.length; i++) {
-                if (rules[i].selectorText === selector) {
-                    rules[i].style[cssProp] = cssVal;
-                    return;
-                }
-            }
-            sheet.insertRule(selector + ' { ' + cssProp + ': ' + cssVal + '; }', rules.length);
-        } catch (e) {
-            console.warn("Stylesheet access restricted: ", e);
-        }
-    }
-
     // Load Medals with Cache Buster
     d3.csv("medals.csv?v=" + version, function(data) {
         data.forEach(function(d) {
@@ -155,25 +199,6 @@ window.onload = function() {
         table.sort((a, b) => (b[4] - a[4]) || (b[1] - a[1]) || (b[2] - a[2]));
         writeTable(table);      
         
-       fetch('https://api.github.com/repos/StefanWG/stefanwg.github.io/commits?path=olympics/winter_2026/medals.csv&page=1&per_page=1')
-        .then(response => response.json())
-        .then(commits => {
-            if (commits && commits.length > 0) {
-                const lastUpdate = new Date(commits[0].commit.author.date);
-                const timeString = lastUpdate.toLocaleString([], { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                document.getElementById('update-timestamp').textContent = "Last Updated: " + timeString;
-            }
-        })
-        .catch(err => {
-            console.warn("Could not fetch GitHub timestamp:", err);
-            document.getElementById('update-timestamp').textContent = "Last Synced: Just now";
-        });
-
         // Load Countries and build heatmaps
         d3.text("data/countries.csv?v=" + version, function(text) {
             table.forEach(function(d) {
@@ -203,18 +228,16 @@ window.onload = function() {
                     
                     img.addEventListener('mousemove', function(e) {
                         var rect = img.getBoundingClientRect();
+                        width = rect.width;
+                        height = rect.height;
                         if (rect.width === 0) return;
 
                         var x = e.clientX - rect.left;
                         var y = e.clientY - rect.top;
 
                         changeCSSStyle(".circle", "transform", `translate(${x}px, ${y}px)`);
-
-                        var xIdx = Math.floor((x / rect.width) * heatMapVals.length);
-                        var yIdx = heatMapVals.length - Math.floor((y / rect.height) * heatMapVals.length);
-                        
-                        xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
-                        yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
+                        var xIdx = compute_idx_in_px_x(x, rect);
+                        var yIdx = compute_idx_in_px_y(y, rect);
 
                         syncUI(heatMapVals[xIdx], heatMapVals[yIdx], countryID);
                     });

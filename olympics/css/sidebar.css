@@ -1,10 +1,21 @@
 #sidebar {
     width: 35%;
+    /* Subtract the header height (110px) to prevent bottom cutoff */
+    height: calc(100vh - 110px); 
     background: rgba(20, 24, 33, 0.85);
     backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column; 
+    overflow: hidden; 
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+/* 1. TOP: Scrollable Table Area */
+.medals-scroll-container {
+    flex-grow: 1; 
+    overflow-y: auto;
+    position: relative;
 }
 
 #medals {
@@ -12,16 +23,18 @@
     border-collapse: collapse;
 }
 
-#medals th {
-    background: rgba(255, 255, 255, 0.05);
+#medals thead th {
+    background: #141821; /* Solid color hides text scrolling behind */
     padding: 15px;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     position: sticky;
     top: 0;
+    z-index: 10;
     color: #fde725;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
 #medals td {
@@ -29,64 +42,97 @@
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.9rem;
-    color: #ffffff; /* Bright white for primary data */
+    color: #ffffff;
 }
 
-/* Optional: Make the country name stand out */
 #medals td:first-child {
-    color: #fde725; /* Yellow highlight for country names */
+    color: #fde725;
     font-weight: 600;
 }
 
-/* Updated Last Synced Styles */
-/* Fix for the "small bubble" timestamp */
-.timestamp-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 20px 0;
-}
-
-#update-timestamp {
-    color: #ffffff !important; /* Forces text to be white */
-    font-family: sans-serif;
-    font-size: 0.8rem;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 8px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    white-space: nowrap; /* Prevents text from wrapping into a bubble shape */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Slides */
+/* 2. BOTTOM: Slider Container Styling */
 .slider-container {
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    margin: 10px;
+    flex-shrink: 0; /* Ensures sliders never get squished */
+    padding: 20px 25px 30px 25px; /* Extra bottom padding for reset button */
+    background: rgba(11, 14, 20, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 20;
 }
 
 .slider-group {
     margin-bottom: 20px;
+}
+
+.slider-header {
     display: flex;
-    flex-direction: column;
-}
-
-.slider-group label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.7);
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
+}
+
+.slider-header label {
+    font-size: 0.7rem;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.slider-group span {
-    text-align: right;
+.multiplier-display {
+    font-family: monospace;
+    color: #fde725;
     font-weight: bold;
-    color: #00f2ff; /* Matches your neon circle */
+    font-size: 0.9rem;
 }
 
-input[type=range] {
+/* Custom Range Input Styling */
+input[type=range].modern-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
     cursor: pointer;
-    accent-color: #00f2ff;
+}
+
+/* The Track */
+input[type=range].modern-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    border: none;
+}
+
+/* The Knob (Thumb) */
+input[type=range].modern-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #fde725;
+    margin-top: -6px; /* Centers thumb on track */
+    box-shadow: 0 0 10px rgba(253, 231, 37, 0.4);
+    transition: transform 0.1s ease;
+}
+
+input[type=range].modern-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Reset Button Styling */
+#reset-btn {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fde725;
+    border: 1px solid rgba(253, 231, 37, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+#reset-btn:hover {
+    background: rgba(253, 231, 37, 0.1);
+    border-color: #fde725;
 }
