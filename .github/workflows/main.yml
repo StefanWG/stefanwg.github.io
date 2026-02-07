@@ -2,7 +2,7 @@ name: Fetch Data
 
 on: 
   schedule:
-     - cron: "52 * * * *"
+     - cron: "0 * * * *"
   workflow_dispatch: 
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
           python-version: '3.10' # Install the python version needed
     
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip pandas numpy matplotlib seaborn lxml
+        run: python -m pip install --upgrade pip pandas numpy matplotlib seaborn lxml requests warnings pathlib time
       - name: Execute Python script # Run the run.py to get the latest data
         run: python data.py
       - name: Commit and Push
