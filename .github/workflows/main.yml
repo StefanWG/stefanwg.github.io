@@ -2,7 +2,7 @@ name: Fetch Data
 
 on: 
   schedule:
-     - cron: "48 13 * * *"
+     - cron: "52 * * * *"
 
 jobs:
   build:
