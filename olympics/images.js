@@ -21,6 +21,32 @@ const roundToHundredth = (value) => {
     return Number(value.toFixed(2));
 };
 
+
+
+// Get references to the sliders and labels
+const goldSlider = document.getElementById('gold-slider');
+const silverSlider = document.getElementById('silver-slider');
+const goldLabel = document.getElementById('gold-val');
+const silverLabel = document.getElementById('silver-val');
+
+function getArrayIndex(val) {
+    return heatMapVals.indexOf(val);
+}
+
+// Function to update the table AND the sliders visually
+function syncUI(silver, gold, countryID) {
+    // 1. Update the table values
+    updateTable(silver, gold, countryID);
+
+    // 2. Sync Sliders: Find where these values exist in your heatMapVals array
+    goldSlider.value = getArrayIndex(gold);
+    silverSlider.value = getArrayIndex(silver);
+    
+    // 3. Update Labels
+    goldLabel.textContent = gold.toFixed(2);
+    silverLabel.textContent = silver.toFixed(2);
+}
+
 function writeTable(t) {
     var medalsTable = document.getElementById('medals');
     medalsTable.innerHTML = '';
@@ -47,7 +73,7 @@ function writeTable(t) {
     });
 }
 
-function updateTable(silver, gold) {
+function updateTable(silver, gold, countryID) {
     table.forEach(function(d) {
         d[5] = d[1] * gold * silver + d[2] * silver + d[3];
     });
@@ -69,12 +95,36 @@ function updateTable(silver, gold) {
 
     document.getElementById('gold').innerHTML = "Gold: " + roundToHundredth(gold * silver);
     document.getElementById('silver').innerHTML = "Silver: " + roundToHundredth(silver);
+    if (countryID) {
+        var countryClass = "cell-" + countryID;
+        var elem = document.getElementsByClassName(countryClass)[0];
+        if (elem) elem.scrollIntoView({behavior: "auto", block: "center"});
+    }
 }
 
 var ssMain = Array.from(document.styleSheets).findIndex(sheet => 
     sheet.href && sheet.href.includes('content.css')
 );
 
+function handleSliderChange() {
+
+    const gold = heatMapVals[parseInt(goldSlider.value)];
+    const silver = heatMapVals[parseInt(silverSlider.value)];
+    
+    updateTable(silver, gold, null);
+    
+    goldLabel.textContent = gold.toFixed(2);
+    silverLabel.textContent = silver.toFixed(2);
+        
+    // Hide all circles since we aren't hovering a specific plot
+    // const circles = document.querySelectorAll('.circle');
+    // circles.forEach(c => c.style.display = 'none');
+}
+
+goldSlider.addEventListener('input', handleSliderChange);
+silverSlider.addEventListener('input', handleSliderChange);
+
+// Load data and build heatmaps after page load
 window.onload = function() {
     if (ssMain === -1) ssMain = 0;
     var cssRules = (document.all) ? 'rules' : 'cssRules';
@@ -166,11 +216,7 @@ window.onload = function() {
                         xIdx = Math.max(0, Math.min(xIdx, heatMapVals.length - 1));
                         yIdx = Math.max(0, Math.min(yIdx, heatMapVals.length - 1));
 
-                        updateTable(heatMapVals[xIdx], heatMapVals[yIdx]);
-
-                        var countryClass = "cell-" + countryID;
-                        var elem = document.getElementsByClassName(countryClass)[0];
-                        if (elem) elem.scrollIntoView({behavior: "auto", block: "center"});
+                        syncUI(heatMapVals[xIdx], heatMapVals[yIdx], countryID);
                     });
                 };
 
