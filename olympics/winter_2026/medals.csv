@@ -32,7 +32,7 @@ Burundi,7,0.0,0.0,0.0,0.0
 Cape Verde,7,0.0,0.0,0.0,0.0
 Cambodia,3,0.0,0.0,0.0,0.0
 Cameroon,6,0.0,0.0,0.0,0.0
-Canada,316,0.0,0.0,1.0,1.0
+Canada,316,0.0,0.0,2.0,2.0
 Cayman Islands,4,0.0,0.0,0.0,0.0
 Central African Republic,4,0.0,0.0,0.0,0.0
 Chad,3,0.0,0.0,0.0,0.0
@@ -143,7 +143,7 @@ Palestine,8,0.0,0.0,0.0,0.0
 Panama,8,0.0,0.0,0.0,0.0
 Papua New Guinea,6,0.0,0.0,0.0,0.0
 Paraguay,28,0.0,0.0,0.0,0.0
-China,388,0.0,0.0,1.0,1.0
+China,388,0.0,1.0,1.0,2.0
 Peru,26,0.0,0.0,0.0,0.0
 Philippines,22,0.0,0.0,0.0,0.0
 Poland,214,0.0,0.0,0.0,0.0
@@ -178,7 +178,7 @@ Saint Vincent and the Grenadines,4,0.0,0.0,0.0,0.0
 Sudan,4,0.0,0.0,0.0,0.0
 Suriname,5,0.0,0.0,0.0,0.0
 Sweden,117,1.0,1.0,0.0,2.0
-Switzerland,127,1.0,0.0,0.0,1.0
+Switzerland,127,2.0,0.0,0.0,2.0
 Syria,6,0.0,0.0,0.0,0.0
 Tajikistan,14,0.0,0.0,0.0,0.0
 Thailand,51,0.0,0.0,0.0,0.0
