@@ -70,7 +70,7 @@ nav {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);;
     gap: 2rem;
     margin-top: 4rem;
 }
@@ -123,4 +123,37 @@ nav {
 .glass-card:hover .card-arrow {
     opacity: 1;
     transform: translateX(10px);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.toggle-link {
+    border-color: rgba(0, 210, 255, 0.2); /* Subtle blue hint */
 }

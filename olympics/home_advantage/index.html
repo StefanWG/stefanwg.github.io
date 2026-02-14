@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Olympic Analysis | Host Advantage</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/content.css">
+    <style>
+        /* Shared Tooltip Style */
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(11, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent); /* Uses dynamic accent */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            pointer-events: none;
+            display: none;
+            z-index: 2000;
+        }
+        #hostCanvas { width: 100%; height: auto; display: block; }
+        .chart-box { width: 100%; box-sizing: border-box; flex-basis: 100%; }
+        
+        /* Dynamic Accent Assignment */
+        :root { --accent: #fde725; } 
+        body.summer { --accent: var(--summer-accent); }
+        body.winter { --accent: var(--winter-accent); }
+        
+        .highlight-text { color: var(--accent); font-weight: 800; }
+    </style>
+</head>
+<body>
+    <div class="background-glow"></div>
+
+    <header id="header">
+        <div class="logo-area">
+            <h2 id="pageTitle">OLYMPIC GAMES</h2>
+            <p id="pageSubtitle">HOST NATION SURGE</p>
+        </div>
+        <div id="description">
+            Analyzing medal performance across a 5-game window. 
+            The plot visualizes the <span class="highlight-text">Home Court Advantage</span>.
+        </div>
+        <div class="nav-links">
+            <a href="../index.html" class="nav-link back-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Dashboard
+            </a>
+            <a href="#" id="seasonToggle" class="nav-link toggle-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <span id="toggleText">Switch Season</span>
+            </a>
+        </div>
+    </header>
+
+    <div id="main">
+        <div id="content">
+            <div class="heatmap chart-box">
+                <h3 id="chartHeading">Performance Timeline</h3>
+                <canvas id="hostCanvas" width="1000" height="500"></canvas>
+                <div id="customTooltip" class="chart-tooltip"></div>
+            </div>
+        </div>
+
+        <aside id="sidebar">
+            <div class="medals-scroll-container">
+                <table id="medals">
+                    <thead>
+                        <tr>
+                            <th>Host Event</th>
+                            <th>-1 Game</th>
+                            <th>Host Year</th>
+                            <th>+1 Game</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <div class="slider-container">
+                <div class="slider-group"></div>
+                    <div class="slider-header">
+                        Filter Games Years: <span id="yearRangeText">1948 - 2026</span>
+                    </div>
+                    <div class="range-wrapper">
+                        <input type="range" id="minYear" min="1948" max="2026" value="1948" step="1", class="modern-slider">
+                        <input type="range" id="maxYear" min="1948" max="2026" value="2026" step="1",  class="modern-slider">
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

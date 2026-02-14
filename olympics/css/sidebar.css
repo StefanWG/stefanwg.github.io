@@ -136,3 +136,37 @@ input[type=range].modern-slider::-webkit-slider-thumb:hover {
     background: rgba(253, 231, 37, 0.1);
     border-color: #fde725;
 }
+
+/* Two sided slider styling */
+.slider-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: var(--accent);
+}
+
+.range-wrapper {
+    position: relative;
+    height: 20px;
+}
+
+/* Overlay inputs on top of each other */
+.range-wrapper input {
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
+    appearance: none;
+    background: none;
+}
+
+.range-wrapper input::-webkit-slider-thumb {
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    pointer-events: auto;
+    border: 2px solid white;
+}
