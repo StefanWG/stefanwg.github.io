@@ -229,7 +229,8 @@ function populateTable() {
     gameData.forEach(game => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${game.label} ${game.year}</td>
+            <td>${game.label} </td>
+            <td>${game.year}</td>
             <td>${game.medals[1] || '-'}</td>
             <td style="color:${config.accent}; font-weight:bold">${game.medals[2] || '-'}</td>
             <td>${game.medals[3] || '-'}</td>
