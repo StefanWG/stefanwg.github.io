@@ -82,18 +82,7 @@ async function loadAndParseData() {
         fullGameData = Object.values(grouped).map((game, i) => ({
             ...game, color: colorPalette[i % colorPalette.length]
         }));
-
-        // Setup Sliders based on CSV content
-        const yearsFound = fullGameData.map(g => parseInt(g.year));
-        const absMin = Math.min(...yearsFound);
-        const absMax = Math.max(...yearsFound);
-        
-        if(minSlider && maxSlider) {
-            minSlider.min = absMin; minSlider.max = absMax;
-            maxSlider.min = absMin; maxSlider.max = absMax;
-            minSlider.value = absMin;
-            maxSlider.value = absMax;
-        }
+    
 
         updateFilter();
     } catch (e) { console.error("Data Error:", e); }
